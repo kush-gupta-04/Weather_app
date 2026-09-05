@@ -66,6 +66,18 @@ searchTab.addEventListener("click", () => {
   switchTab(searchTab);
 });
 
+//check if cordinates are already present in session storage
+function getfromSessionStorage() {
+  const localCoordinates = sessionStorage.getItem("user-coordinates");
+  if (!localCoordinates) {
+    //agar local coordinates nahi mile
+    grantAccessContainer.classList.add("active");
+  } else {
+    const coordinates = JSON.parse(localCoordinates);
+    fetchUserWeatherInfo(coordinates);
+  }
+}
+
 function getLocation() {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(showPosition);
