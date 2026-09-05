@@ -95,3 +95,26 @@ function showPosition(position) {
   sessionStorage.setItem("user-coordinates", JSON.stringify(userCoordinates));
   fetchUserWeatherInfo(userCoordinates);
 }
+
+async function fetchUserWeatherInfo(coordinates) {
+  const { lat, lon } = coordinates;
+  // make grantcontainer invisible
+  grantAccessContainer.classList.remove("active");
+  //make loader visible
+  loadingScreen.classList.add("active");
+
+  //API CALL
+  try {
+    const response = await fetch(
+      `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`,
+    );
+    const data = await response.json();
+
+    loadingScreen.classList.remove("active");
+    userInfoContainer.classList.add("active");
+    renderWeatherInfo(data);
+  } catch (err) {
+    loadingScreen.classList.remove("active");
+    //HW
+  }
+}
