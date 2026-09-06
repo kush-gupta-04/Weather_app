@@ -13,9 +13,28 @@ currentTab.classList.add("current-tab");
 const API_KEY = "a9888a55664d7519c5f069b8a49f3967";
 
 function renderWeatherinfo(data) {
-  let newpara = document.createElement("p");
-  newpara.textContent = `${data?.main?.temp.toFixed(2)} °C`;
-  document.body.appendChild(newpara);
+  //fistly, we have to fethc the elements
+
+  const cityName = document.querySelector("[data-cityName]");
+  const countryIcon = document.querySelector("[data-countryIcon]");
+  const desc = document.querySelector("[data-weatherDesc]");
+  const weatherIcon = document.querySelector("[data-weatherIcon]");
+  const temp = document.querySelector("[data-temp]");
+  const windspeed = document.querySelector("[data-windspeed]");
+  const humidity = document.querySelector("[data-humidity]");
+  const cloudiness = document.querySelector("[data-cloudiness]");
+
+  console.log(weatherInfo);
+
+  //fetch values from weatherINfo object and put it UI elements
+  cityName.innerText = weatherInfo?.name;
+  countryIcon.src = `https://flagcdn.com/144x108/${weatherInfo?.sys?.country.toLowerCase()}.png`;
+  desc.innerText = weatherInfo?.weather?.[0]?.description;
+  weatherIcon.src = `http://openweathermap.org/img/w/${weatherInfo?.weather?.[0]?.icon}.png`;
+  temp.innerText = `${weatherInfo?.main?.temp} °C`;
+  windspeed.innerText = `${weatherInfo?.wind?.speed} m/s`;
+  humidity.innerText = `${weatherInfo?.main?.humidity}%`;
+  cloudiness.innerText = `${weatherInfo?.clouds?.all}%`;
 }
 
 async function FetchWeatherDetails() {
@@ -83,6 +102,7 @@ function getLocation() {
     navigator.geolocation.getCurrentPosition(showPosition);
   } else {
     //HW - show an alert for no gelolocation support available
+    alert("Geolocation is not supported by this browser.");
   }
 }
 
@@ -115,6 +135,7 @@ async function fetchUserWeatherInfo(coordinates) {
     renderWeatherInfo(data);
   } catch (err) {
     loadingScreen.classList.remove("active");
-    //HW
+    //HW - show an alert for no gelolocation support available
+    alert("Error while fetching the weather info");
   }
 }
